@@ -1,0 +1,23 @@
+@font-face {
+  font-weight: 100;
+  font-family: "Helvetica";
+  font-style: normal;
+  src: url("HelveticaNeueUltraLight.woff2") format("woff2"),
+  url("HelveticaNeueUltraLight.woff") format("woff");
+}
+
+@font-face {
+  font-weight: 300;
+  font-family: 'Helvetica';
+  font-style: normal;
+  src: url("HelveticaNeueLight.woff2") format("woff2"),
+  url("HelveticaNeueLight.woff") format("woff");
+}
+
+@font-face {
+  font-weight: 300;
+  font-family: "Helvetica";
+  font-style: italic;
+  src: url("HelveticaNeueLightItalic.woff2") format("woff2"),
+  url("HelveticaNeueLightItalic.woff") format("woff");
+}
