@@ -29,11 +29,11 @@ class TodoForm extends Component {
     this.setState({ input: e.target.value });
   };
 
-  checkboxChange = (e) => {
+  checkboxChange = e => {
     this.setState({
-      isChecked: e.target.checked
-    });
-    this.props.toggleAll(this.state.isChecked);
+      isChecked: e.target.checked},
+      () => this.props.toggleAll(this.state.isChecked)
+    );
 	}
 
   render() {

@@ -5,11 +5,12 @@ class Task extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      input: ''
+      input: '',
+      isChecked: false
     };
     this.editBegin = this.editBegin.bind(this);
     this.editComplete = this.editComplete.bind(this);
-    this.toggleTask = this.toggleTask.bind(this);
+    this.toggleChange = this.toggleChange.bind(this);
     this.deleteTask = this.deleteTask.bind(this);
     this.handleEnter = this.handleEnter.bind(this);
     this.inputChange = this.inputChange.bind(this);
@@ -23,17 +24,18 @@ class Task extends Component {
   editComplete = () => {
     if (this.state.input) {
       this.props.editItemComplete(this.props.id, this.state.input);
-      this.props.recordItem(this.props.id);
     } else {
       this.props.deleteItem(this.props.id);
       this.props.removeItem(this.props.id);
     }
   }
 
-  toggleTask = () => {
-    this.props.toggleItem(this.props.id);
-    this.props.recordItem(this.props.id);
-  }
+  toggleChange = e => {
+    this.setState({
+      isChecked: e.target.checked},
+      () => this.props.toggleItem(this.props.id)
+    );
+	}
 
   deleteTask = () => {
     this.props.deleteItem(this.props.id);
@@ -53,10 +55,14 @@ class Task extends Component {
     const classDone = this.props.task.done ? 'completed' : '';
     const classEdit = this.props.task.edit ? 'editMode' : '';
     const className = classDone + ' ' + classEdit;
+    const check = this.props.task.done ? true : false;
 
     return(
       <li className={className} style={{ display: this.props.task.hide ? "none" : "block" }}>
-        <input onClick={this.toggleTask} type="checkbox" className="toggle-one"/>
+        <input
+        onChange={this.toggleChange}
+        checked={check}
+        type="checkbox" className="toggle-one"/>
         <label></label>
         <label onDoubleClick={this.editBegin} className="label-text">{this.props.task.title}</label>
         <input

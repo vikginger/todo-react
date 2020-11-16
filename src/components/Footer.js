@@ -58,7 +58,7 @@ class Footer extends Component {
           </li>
         </ul>
         <button className="clear-completed"
-    //    onClick={this.props.deleteDoneItems}
+        onClick={this.props.deleteDoneItems}
         style={{ display: this.props.tasksDone.length > 0 ? "block" : "none" }} type="button" name="button">Clear completed</button>
       </footer>
     );

@@ -17,7 +17,7 @@ class App extends Component {
     this.toggleItem = this.toggleItem.bind(this);
     this.toggleAll = this.toggleAll.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
-//    this.deleteDoneItems = this.deleteDoneItems.bind(this);
+    this.deleteDoneItems = this.deleteDoneItems.bind(this);
     this.editItemBegin = this.editItemBegin.bind(this);
     this.editItemComplete = this.editItemComplete.bind(this);
     this.filterAll = this.filterAll.bind(this);
@@ -26,6 +26,12 @@ class App extends Component {
     this.saveItem = this.saveItem.bind(this);
     this.removeItem = this.removeItem.bind(this);
     this.recordItem = this.recordItem.bind(this);
+  }
+
+  componentDidMount() {
+    const items = JSON.parse(localStorage.getItem("todo")) || {};
+    const tasks = Object.values(items);
+    this.setState({tasks: tasks});
   }
 
   addItem = task => {
@@ -41,7 +47,7 @@ class App extends Component {
       };
       tasks.push(newTask);
       this.saveItem(newTask);
-      return tasks;
+      return {...tasks};
     });
   }
 
@@ -57,15 +63,13 @@ class App extends Component {
     localStorage.setItem("todo", JSON.stringify(items));
   };
 
-  recordItem = id => {
-    const index = this.state.tasks.map(task => task.id).indexOf(id);
-    let { tasks } = this.state;
+  recordItem = (index, state) => {
     let recordItem = {};
-    recordItem["id"] = tasks[index].id;
-    recordItem["title"] = tasks[index].title;
-    recordItem["done"] = tasks[index].done;
-    recordItem["edit"] = tasks[index].edit;
-    recordItem["hide"] = tasks[index].hide;
+    recordItem["id"] = state[index].id;
+    recordItem["title"] = state[index].title;
+    recordItem["done"] = state[index].done;
+    recordItem["edit"] = state[index].edit;
+    recordItem["hide"] = state[index].hide;
     this.saveItem(recordItem);
   }
 
@@ -74,7 +78,8 @@ class App extends Component {
     this.setState(state => {
       let { tasks } = state;
       tasks[index].done = !tasks[index].done;
-      return tasks;
+      this.recordItem(index, tasks);
+      return {...tasks};
     });
   }
 
@@ -83,35 +88,31 @@ class App extends Component {
       let { tasks } = state;
       tasks.forEach((task) => {
         if (check === true) {
-        task.done = true;
+          task.done = true;
         } else {
-        task.done = false;
+          task.done = false;
         }
         this.saveItem(task);
       });
-      return tasks;
+      return {...tasks};
     });
   }
 
-/*  deleteDoneItems() {
-    this.setState(state => {
-      let { tasks } = state;
-      for (let i = tasks.length; i >= 0; i--) {
-        if (tasks[i].done === true) {
-          tasks.splice(i, 1);
-          this.removeItem(tasks[i].id);
-        }
-      }
-      return tasks;
+  deleteDoneItems = () => {
+    let resultList = this.state.tasks.filter(task => task.done !== true);
+    let removeList = this.state.tasks.filter(task => task.done === true);
+    this.setState({tasks: resultList});
+    removeList.forEach((task) => {
+      this.removeItem(task.id);
     });
-  } */
+  }
 
   deleteItem = id => {
     const index = this.state.tasks.map(task => task.id).indexOf(id);
     this.setState(state => {
       let { tasks } = state;
       tasks.splice(index, 1);
-      return tasks;
+      return {...tasks};
     });
   }
 
@@ -120,7 +121,7 @@ class App extends Component {
     this.setState(state => {
       let { tasks } = state;
       tasks[index].edit = true;
-      return tasks;
+      return {...tasks};
     });
   }
 
@@ -130,7 +131,8 @@ class App extends Component {
       let { tasks } = state;
       tasks[index].edit = false;
       tasks[index].title = label;
-      return tasks;
+      this.recordItem(index, tasks);
+      return {...tasks};
     });
   }
 
@@ -140,7 +142,7 @@ class App extends Component {
       tasks.forEach((task) => {
         task.hide = false;
       });
-      return tasks;
+      return {...tasks};
     });
   }
 
@@ -154,7 +156,7 @@ class App extends Component {
           task.hide = false;
         }
       });
-      return tasks;
+      return {...tasks};
     });
   }
 
@@ -168,7 +170,7 @@ class App extends Component {
           task.hide = true;
         }
       });
-      return tasks;
+      return {...tasks};
     });
   }
 
