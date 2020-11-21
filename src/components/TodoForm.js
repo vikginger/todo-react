@@ -4,10 +4,12 @@ class TodoForm extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       input: '',
       isChecked: false
     };
+
     this.addTask = this.addTask.bind(this);
     this.handleEnter = this.handleEnter.bind(this);
     this.inputChange = this.inputChange.bind(this);
@@ -40,16 +42,25 @@ class TodoForm extends Component {
 
     return (
       <div>
-        <input onKeyPress={this.handleEnter}
-          onChange={this.inputChange}
+        <input
+          className="new-task"
+          type="text"
           value={this.state.input}
-          className="new-task" type="text" placeholder="What needs to be done?" autoFocus=""/>
-        <div className="chekbox__toggle-all" style={{ display: this.props.tasks.length === 0 ? "none" : "block" }}>
+          placeholder="What needs to be done?"
+          autoFocus=""
+          onKeyPress={this.handleEnter}
+          onChange={this.inputChange}
+        />
+        <div
+          style={{ display: this.props.tasks.length === 0 ? "none" : "block" }}
+          className="chekbox__toggle-all"
+        >
           <input
-          onChange={this.checkboxChange}
-          checked={this.state.isChecked}
-          className="toggle-all" id="toggle-all" type="checkbox" />
-          <label htmlFor="toggle-all"></label>
+            onChange={this.checkboxChange}
+            checked={this.state.isChecked}
+            className="toggle-all" id="toggle-all" type="checkbox"
+          />
+          <label htmlFor="toggle-all" />
         </div>
       </div>
     );

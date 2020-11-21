@@ -10,9 +10,11 @@ class App extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       tasks: []
     };
+
     this.addItem = this.addItem.bind(this);
     this.toggleItem = this.toggleItem.bind(this);
     this.toggleAll = this.toggleAll.bind(this);
@@ -34,178 +36,177 @@ class App extends Component {
     this.setState({tasks: tasks});
   }
 
-  addItem = task => {
+  addItem = title => {
     this.setState(state => {
-      let { tasks } = state;
-      let id = new Date().getTime();
-      let newTask = {
-        id: id,
-        title: task,
+      // TODO
+      // можно таким образом упросить запись
+      // не используй let если переменная не будет модифицироваться, используй const
+      const newTask = {
+        id: new Date().getTime(),
+        title,
         done: false,
         edit: false,
         hide: false
       };
-      tasks.push(newTask);
+
+      state.tasks.push(newTask);
       this.saveItem(newTask);
-      return {...tasks};
+
+      return {...state.tasks};
     });
   }
 
   saveItem = task => {
     const items = JSON.parse(localStorage.getItem("todo")) || {};
     items[task.id] = task;
+
     localStorage.setItem("todo", JSON.stringify(items));
   }
 
   removeItem = id => {
     const items = JSON.parse(localStorage.getItem("todo")) || {};
     delete items[id];
+
     localStorage.setItem("todo", JSON.stringify(items));
   };
 
   recordItem = (index, state) => {
-    let recordItem = {};
-    recordItem["id"] = state[index].id;
-    recordItem["title"] = state[index].title;
-    recordItem["done"] = state[index].done;
-    recordItem["edit"] = state[index].edit;
-    recordItem["hide"] = state[index].hide;
-    this.saveItem(recordItem);
+    // TODO
+    // Можно упросить запись через спред { ...object }
+    this.saveItem({
+      ...state[index]
+    });
   }
 
   toggleItem = id => {
     const index = this.state.tasks.map(task => task.id).indexOf(id);
+
     this.setState(state => {
-      let { tasks } = state;
-      tasks[index].done = !tasks[index].done;
-      this.recordItem(index, tasks);
-      return {...tasks};
+      state.tasks[index].done = !state.tasks[index].done;
+      this.recordItem(index, state.tasks);
+
+      return {...state.tasks};
     });
   }
 
   toggleAll = check => {
     this.setState(state => {
-      let { tasks } = state;
-      tasks.forEach((task) => {
-        if (check === true) {
-          task.done = true;
-        } else {
-          task.done = false;
-        }
+      state.tasks.forEach((task) => {
+        // TODO
+        // можно упроситить запись, тк это тоже самое что и с if
+        task.done = check;
         this.saveItem(task);
       });
-      return {...tasks};
+      return {...state.tasks};
     });
   }
 
   deleteDoneItems = () => {
-    let resultList = this.state.tasks.filter(task => task.done !== true);
-    let removeList = this.state.tasks.filter(task => task.done === true);
-    this.setState({tasks: resultList});
-    removeList.forEach((task) => {
-      this.removeItem(task.id);
-    });
+    const resultList = this.state.tasks.filter(task => task.done !== true);
+    const removeList = this.state.tasks.filter(task => task.done === true);
+
+    this.setState({ tasks: resultList });
+
+    // TODO
+    // Можно не использовать { ... } если нужно выполнить действие в 1 строку
+    removeList.forEach((task) => this.removeItem(task.id));
   }
 
   deleteItem = id => {
     const index = this.state.tasks.map(task => task.id).indexOf(id);
+
+    // TODO
+    // Можно записать таким образом
     this.setState(state => {
-      let { tasks } = state;
-      tasks.splice(index, 1);
-      return {...tasks};
+      return {...state.tasks.splice(index, 1)};
     });
   }
 
   editItemBegin = id => {
     const index = this.state.tasks.map(task => task.id).indexOf(id);
+
     this.setState(state => {
-      let { tasks } = state;
-      tasks[index].edit = true;
-      return {...tasks};
+      state.tasks[index].edit = true;
+      return {...state.tasks};
     });
   }
 
   editItemComplete = (id, label) => {
     const index = this.state.tasks.map(task => task.id).indexOf(id);
+
     this.setState(state => {
-      let { tasks } = state;
-      tasks[index].edit = false;
-      tasks[index].title = label;
-      this.recordItem(index, tasks);
-      return {...tasks};
+      state.tasks[index].edit = false;
+      state.tasks[index].title = label;
+      this.recordItem(index, state.tasks);
+
+      return {...state.tasks};
     });
   }
 
   filterAll() {
     this.setState(state => {
-      let { tasks } = state;
-      tasks.forEach((task) => {
-        task.hide = false;
-      });
-      return {...tasks};
+      state.tasks.forEach((task) => task.hide = false);
+
+      return {...state.tasks};
     });
   }
 
   filterActive() {
     this.setState(state => {
-      let { tasks } = state;
-      tasks.forEach((task) => {
-        if (task.done === true) {
-          task.hide = true;
-        } else {
-          task.hide = false;
-        }
-      });
-      return {...tasks};
+      state.tasks.forEach((task) => task.hide = task.done === true);
+
+      return {...state.tasks};
     });
   }
 
   filterCompleted() {
     this.setState(state => {
-      let { tasks } = state;
-      tasks.forEach((task) => {
-        if (task.done === true) {
-          task.hide = false;
-        } else {
-          task.hide = true;
-        }
-      });
-      return {...tasks};
+      state.tasks.forEach((task) => task.hide = task.done !== true);
+
+      return {...state.tasks};
     });
   }
 
   render() {
-
     const { tasks } = this.state;
     const tasksLeft = tasks.filter(task => task.done === false);
     const tasksDone = tasks.filter(task => task.done === true);
 
+    // TODO
+    // посмотри как я организовал синтаксис, так более читабельно
     return (
-      <div className = "main">
+      <div className="main">
         <Header />
-        <TodoForm tasks={tasks} addItem={this.addItem} toggleAll={this.toggleAll} />
+        <TodoForm
+          tasks={tasks}
+          addItem={this.addItem}
+          toggleAll={this.toggleAll}
+        />
         <ul className="todo-list">
           {tasks.map(task => (
             <Task
-            tasks={tasks}
-            toggleItem={this.toggleItem}
-            deleteItem={this.deleteItem}
-            recordItem={this.recordItem}
-            removeItem={this.removeItem}
-            editItemBegin={this.editItemBegin}
-            editItemComplete={this.editItemComplete}
-            task={task}
-            id={task.id}
-            key={task.id} />
+              {...task} // Можно записать так
+              key={task.id}
+              toggleItem={this.toggleItem}
+              deleteItem={this.deleteItem}
+              recordItem={this.recordItem}
+              removeItem={this.removeItem}
+              editItemBegin={this.editItemBegin}
+              editItemComplete={this.editItemComplete}
+              // task={task}
+              // id={task.id}
+            />
           ))}
         </ul>
-        <Footer tasks={tasks}
-        tasksLeft={tasksLeft}
-        tasksDone={tasksDone}
-        deleteDoneItems={this.deleteDoneItems}
-        filterAll={this.filterAll}
-        filterActive={this.filterActive}
-        filterCompleted={this.filterCompleted} />
+        <Footer
+          tasks={tasks}
+          tasksLeft={tasksLeft}
+          tasksDone={tasksDone}
+          deleteDoneItems={this.deleteDoneItems}
+          filterAll={this.filterAll}
+          filterActive={this.filterActive}
+          filterCompleted={this.filterCompleted}
+        />
       </div>
     )
   }

@@ -41,25 +41,53 @@ class Footer extends Component {
     const classNameCompleted = classFilter + ' ' + classFilterCompleted;
 
     return (
-      <footer className="footer" style={{ display: this.props.tasks.length === 0 ? "none" : "flex" }}>
+      <footer
+        style={{ display: this.props.tasks.length === 0 ? "none" : "flex" }}
+        className="footer"
+      >
         <span className="todo-count">
-          <strong id="todo-count-left"></strong>
-          {this.props.tasksLeft.length} item left
+          <strong id="todo-count-left" />
+          {this.props.tasksLeft.length}
+          item left
         </span>
         <ul className="filters">
           <li>
-            <a href="#/" className={classNameAll} onClick={this.filterAllTasks}>All</a>
+            <a
+              className={classNameAll}
+              href="#/"
+              onClick={this.filterAllTasks}
+            >
+              All
+            </a>
           </li>
           <li>
-            <a href="#/active" className={classNameActive} onClick={this.filterActiveTasks}>Active</a>
+            <a
+              className={classNameActive}
+              href="#/active"
+              onClick={this.filterActiveTasks}
+            >
+              Active
+            </a>
           </li>
           <li>
-            <a href="#/completed" className={classNameCompleted} onClick={this.filterCompletedTasks}>Completed</a>
+            <a
+              className={classNameCompleted}
+              href="#/completed"
+              onClick={this.filterCompletedTasks}
+            >
+              Completed
+            </a>
           </li>
         </ul>
-        <button className="clear-completed"
-        onClick={this.props.deleteDoneItems}
-        style={{ display: this.props.tasksDone.length > 0 ? "block" : "none" }} type="button" name="button">Clear completed</button>
+        <button
+          style={{ display: this.props.tasksDone.length > 0 ? "block" : "none" }}
+          className="clear-completed"
+          type="button"
+          name="button"
+          onClick={this.props.deleteDoneItems}
+        >
+          Clear completed
+        </button>
       </footer>
     );
   }
