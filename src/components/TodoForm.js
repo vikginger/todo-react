@@ -4,6 +4,12 @@ class TodoForm extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      input: '',
+      isChecked: false
+    };
+
     this.addTask = this.addTask.bind(this);
     this.inputChange = this.inputChange.bind(this);
     this.handleEnter = this.handleEnter.bind(this);
@@ -11,8 +17,9 @@ class TodoForm extends Component {
   }
 
   addTask = () => {
-    if (this.props.title) {
-      this.props.addTask(this.props.title)
+    if (this.state.input) {
+      this.props.addTask(this.state.input);
+      this.setState({ input: '' });
     };
   };
 
@@ -21,12 +28,14 @@ class TodoForm extends Component {
   };
 
   inputChange(e) {
-    this.props.changeInput(e.target.value);
+    this.setState({ input: e.target.value });
   };
 
   checkboxChange = e => {
-    this.props.toggleChange(e.target.checked);
-    this.props.toggleAllTasks(this.props.isChecked);
+    this.setState({
+      isChecked: e.target.checked},
+      () => this.props.toggleAllTasks(this.state.isChecked)
+    );
 	}
 
   render () {
@@ -38,7 +47,7 @@ class TodoForm extends Component {
           type="text"
           placeholder="What needs to be done?"
           autoFocus=""
-          value={this.props.title}
+          value={this.state.input}
           onChange={this.inputChange}
           onKeyPress={this.handleEnter}
         />
@@ -48,7 +57,7 @@ class TodoForm extends Component {
         >
           <input
             onChange={this.checkboxChange}
-            checked={this.props.isChecked}
+            checked={this.state.isChecked}
             className="toggle-all" id="toggle-all" type="checkbox"
           />
           <label htmlFor="toggle-all" />

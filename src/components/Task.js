@@ -4,6 +4,12 @@ class Task extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      input: '',
+      isChecked: false
+    };
+
     this.deleteTask = this.deleteTask.bind(this);
     this.toggleChange = this.toggleChange.bind(this);
     this.editBegin = this.editBegin.bind(this);
@@ -21,17 +27,17 @@ class Task extends Component {
   }
 
   editBegin = () => {
-    this.props.editBeginInput(this.props.title);
     this.props.editBeginTask(this.props.id);
+    this.state.input = this.props.title;
   }
 
   inputChange = (e) => {
-    this.props.changeInputTask(e.target.value);
+    this.setState({ input: e.target.value });
   };
 
   editComplete = () => {
-    if (this.props.input) {
-      this.props.editCompleteTask(this.props.id, this.props.input);
+    if (this.state.input) {
+      this.props.editCompleteTask(this.props.id, this.state.input);
     } else {
       this.props.removeTask(this.props.id);
     }
@@ -68,7 +74,7 @@ class Task extends Component {
         </label>
         <input
           type="text"
-          value={this.props.input}
+          value={this.state.input}
           onBlur={this.editComplete}
           onChange={this.inputChange}
           onKeyPress={this.handleEnter}

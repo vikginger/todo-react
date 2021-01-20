@@ -4,6 +4,13 @@ class Footer extends Component {
 
   constructor(props) {
     super(props);
+
+    this.state = {
+      filterAll: true,
+      filterActive: false,
+      filterCompleted: false
+    };
+
     this.clickAll = this.clickAll.bind(this);
     this.clickActive = this.clickActive.bind(this);
     this.clickCompleted = this.clickCompleted.bind(this);
@@ -11,17 +18,17 @@ class Footer extends Component {
   }
 
   clickAll = () => {
-    this.props.filterAll();
+    this.setState({ filterAll: true, filterActive: false, filterCompleted: false });
     this.props.filterAllTasks();
   };
 
   clickActive = () => {
-    this.props.filterActive();
+    this.setState({ filterAll: false, filterActive: true, filterCompleted: false });
     this.props.filterActiveTasks();
   };
 
   clickCompleted = () => {
-    this.props.filterCompleted();
+    this.setState({ filterAll: false, filterActive: false, filterCompleted: true });
     this.props.filterCompletedTasks();
   };
 
@@ -35,9 +42,9 @@ class Footer extends Component {
 
     const classFilter = 'filters__item';
 
-    const classFilterAll = this.props.footer.filterAll ? 'selected' : '';
-    const classFilterActive = this.props.footer.filterActive ? 'selected' : '';
-    const classFilterCompleted = this.props.footer.filterCompleted ? 'selected' : '';
+    const classFilterAll = this.state.filterAll ? 'selected' : '';
+    const classFilterActive = this.state.filterActive ? 'selected' : '';
+    const classFilterCompleted = this.state.filterCompleted ? 'selected' : '';
 
     const classNameAll = classFilter + ' ' + classFilterAll;
     const classNameActive = classFilter + ' ' + classFilterActive;
