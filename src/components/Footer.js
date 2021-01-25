@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import styles from "../styles/Footer.module.scss";
+
 class Footer extends Component {
 
   constructor(props) {
@@ -40,30 +42,24 @@ class Footer extends Component {
     const tasksLeft = this.props.tasks.filter(task => task.done === false);
     const tasksDone = this.props.tasks.filter(task => task.done === true);
 
-    const classFilter = 'filters__item';
-
-    const classFilterAll = this.state.filterAll ? 'selected' : '';
-    const classFilterActive = this.state.filterActive ? 'selected' : '';
-    const classFilterCompleted = this.state.filterCompleted ? 'selected' : '';
-
-    const classNameAll = classFilter + ' ' + classFilterAll;
-    const classNameActive = classFilter + ' ' + classFilterActive;
-    const classNameCompleted = classFilter + ' ' + classFilterCompleted;
+    const classFilterAll = this.state.filterAll ? styles.selected : '';
+    const classFilterActive = this.state.filterActive ? styles.selected : '';
+    const classFilterCompleted = this.state.filterCompleted ? styles.selected : '';
 
     return (
       <footer
         style={{ display: this.props.tasks.length === 0 ? "none" : "flex" }}
-        className="footer"
+        className={styles.footer}
       >
-        <span className="todo-count">
+        <span className={styles.count}>
           <strong id="todo-count-left" />
           {tasksLeft.length + ' '}
            item left
         </span>
-        <ul className="filters">
+        <ul className={styles.filters}>
           <li>
             <a
-              className={classNameAll}
+              className={styles.item + ' ' + classFilterAll}
               href="#/"
               onClick={this.clickAll}
             >
@@ -72,7 +68,7 @@ class Footer extends Component {
           </li>
           <li>
             <a
-              className={classNameActive}
+              className={styles.item + ' ' + classFilterActive}
               href="#/active"
               onClick={this.clickActive}
             >
@@ -81,7 +77,7 @@ class Footer extends Component {
           </li>
           <li>
             <a
-              className={classNameCompleted}
+              className={styles.item + ' ' + classFilterCompleted}
               href="#/completed"
               onClick={this.clickCompleted}
             >
@@ -91,7 +87,7 @@ class Footer extends Component {
         </ul>
         <button
           style={{ display: tasksDone.length > 0 ? "block" : "none" }}
-          className="clear-completed"
+          className={styles.completed}
           type="button"
           name="button"
           onClick={this.deleteDoneItems}

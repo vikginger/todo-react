@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import styles from "../styles/Task.module.scss";
+
 class Task extends Component {
 
   constructor(props) {
@@ -48,8 +50,8 @@ class Task extends Component {
   };
 
   render () {
-    const classDone = this.props.done ? 'completed' : '';
-    const classEdit = this.props.edit ? 'editMode' : '';
+    const classDone = this.props.done ? styles.completed : '';
+    const classEdit = this.props.edit ? styles.edit : '';
     const className = classDone + ' ' + classEdit;
     const check = this.props.done;
 
@@ -57,22 +59,28 @@ class Task extends Component {
     return(
       <li
         style={{ display: this.props.hide ? "none" : "block" }}
-        className={className}
+        className={className + styles.item}
       >
         <input
-          className="toggle-one"
+          style={{ display: this.props.edit ? "none" : "block" }}
+          className={styles.toggle}
           type="checkbox"
           checked={check}
           onChange={this.toggleChange}
         />
-        <label/>
         <label
-          className="label-text"
+          style={{ display: this.props.edit ? "none" : "block" }}
+        />
+        <label
+          style={{ display: this.props.edit ? "none" : "block" }}
+          className={styles.text}
           onDoubleClick={this.editBegin}
         >
           {this.props.title}
         </label>
         <input
+          style={{ display: this.props.edit ? "block" : "none" }}
+          className={styles.input}
           type="text"
           value={this.state.input}
           onBlur={this.editComplete}
@@ -80,7 +88,8 @@ class Task extends Component {
           onKeyPress={this.handleEnter}
         />
         <button
-          className="delete"
+          style={{ display: this.props.edit ? "none" : "block" }}
+          className={styles.delete}
           type="button"
           onClick={this.deleteTask}
         />

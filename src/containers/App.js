@@ -8,7 +8,9 @@ import Task from '../components/Task.js';
 import Footer from '../components/Footer.js';
 
 import '../fonts/fonts.css';
-import '../styles/App.css';
+
+import '../styles/mainStyles.scss';
+import styles from '../styles/App.module.scss';
 
 class App extends Component {
 
@@ -20,14 +22,14 @@ class App extends Component {
     const tasks = this.props.tasks;
 
     return (
-      <div className="main">
+      <div className={styles.main}>
         <Header />
         <TodoForm
           tasks={this.props.tasks}
           addTask={this.props.addTask}
           toggleAllTasks={this.props.toggleAllTasks}
         />
-        <ul className="todo-list">
+        <ul className={styles.list}>
           {tasks.map(task => (
             <Task
               {...task}

@@ -26,9 +26,24 @@ module.exports = {
         },
       },
       {
-        test: /\.css$/,
-        use: ["style-loader", "css-loader"]
-      },
+        test: /\.s?css$/,
+        oneOf: [
+          {
+            test: /\.module\.s?css$/,
+            use: [
+              MiniCssExtractPlugin.loader,
+              {
+                loader: "css-loader",
+                options: { modules: true, exportOnlyLocals: false }
+              },
+              "sass-loader"
+            ]
+          },
+          {
+            use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"]
+          }
+        ]
+      };
       {
         test: /\.(eot|svg|ttf|woff|woff2)$/,
         type: 'asset/inline',

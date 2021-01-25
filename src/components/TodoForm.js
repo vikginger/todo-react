@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import styles from "../styles/TodoForm.module.scss";
+
 class TodoForm extends Component {
 
   constructor(props) {
@@ -43,7 +45,7 @@ class TodoForm extends Component {
     return(
       <div>
         <input
-          className="new-task"
+          className={styles.newTask}
           type="text"
           placeholder="What needs to be done?"
           autoFocus=""
@@ -53,12 +55,14 @@ class TodoForm extends Component {
         />
         <div
           style={{ display: this.props.tasks.length === 0 ? "none" : "block" }}
-          className="chekbox__toggle-all"
+          className={styles.chekboxToggle}
         >
           <input
             onChange={this.checkboxChange}
             checked={this.state.isChecked}
-            className="toggle-all" id="toggle-all" type="checkbox"
+            className={styles.toggle}
+            id="toggle-all"
+            type="checkbox"
           />
           <label htmlFor="toggle-all" />
         </div>
